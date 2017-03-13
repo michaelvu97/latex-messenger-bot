@@ -25,7 +25,7 @@ const
 // Later on, make this more in depth to actually use the latex compiler errors.
 const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed";
 
-function recieveMath (recipientID, math) {
+function receivedMath (recipientID, math) {
   /*
    * Receives a math string as Tex and converts to svg, which converts to png.
    */
