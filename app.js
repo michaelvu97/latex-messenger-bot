@@ -19,7 +19,8 @@ const
   mjAPI      = require('mathjax-node'),
   fs         = require('pn/fs'),
   execFile   = require('child_process').execFile,
-  svg2png    = require("svg2png");
+  svg2png    = require("svg2png"),
+  phantomjs  = require("phantomjs-prebuilt");
 
 // Later on, make this more in depth to actually use the latex compiler errors.
 const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed";

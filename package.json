@@ -19,12 +19,23 @@
     "config": "^1.20.4",
     "ejs": "^2.4.2",
     "express": "^4.13.4",
-    "request": "^2.72.0"
-  },
-  "engines": {
-    "node": "~4.1.2",
+    "request": "^2.72.0",
     "mathjax-node": "0.5.2",
     "svg2png": "4.1.1",
+    "phantomjs-prebuilt": "^2.1.14",
+    "pn": "^1.0.0",
+    "yargs": "^6.5.0"
+  },
+  "engines": {
+    "node": "^6.0.0",
     "phantomjs": "2.1.7"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "eslint": "^3.12.2",
+    "mkdirp": "^0.5.1",
+    "mocha": "^3.2.0",
+    "rimraf": "^2.5.4"
   }
 }
