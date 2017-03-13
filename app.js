@@ -414,7 +414,7 @@ function sendImageMessage(recipientId) {
       attachment: {
         type: "image",
         payload: {
-          url: SERVER_URL + '/output/' + recipientID + '.png'
+          url: SERVER_URL + '/output/' + recipientId + '.png'
         }
       }
     }
