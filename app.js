@@ -21,10 +21,6 @@ const
   execFile   = require('child_process').execFile,
   svg2png    = require("svg2png");
 
-// MJ test
-var math = "\\sum_0^{\\infty}\\frac{1}{x}";
-recieveMath("testid", math);
-
 // Later on, make this more in depth to actually use the latex compiler errors.
 const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed";
 
