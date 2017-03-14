@@ -429,14 +429,14 @@ function sendImageMessage(recipientId, imageBuffer) {
           attachment: {
             type: "image",
             payload: {
-              url: imageUrl;
+              url: imageUrl
             }
           }
         }
       };
 
       callSendAPI(messageData); // remove the image from memory after.
-      
+
     });
     
   });
