@@ -414,8 +414,16 @@ function sendImageMessage(recipientId, imageBuffer) {
 
   var base64Buffer = new Buffer(imageBuffer).toString('base64');
 
-  cloudinary.uploader.upload(base64Buffer, function (result) {
-    console.log(result);
+  var localFilePath = "./output/" + recipientId + ".png";
+
+  fs.writeFile(localFilePath, imageBuffer, function (error) {
+    console.log(error);
+
+    // Now we have the file saved locally, upload it to cloudinary
+    cloudinary.uploader.upload(localFilePath, function (result) {
+      console.log(result);
+    });
+    
   });
 
   var messageData = {
@@ -434,7 +442,7 @@ function sendImageMessage(recipientId, imageBuffer) {
 
 
 
-  // callSendAPI(messageData); // remove the image from memory after.
+  callSendAPI(messageData); // remove the image from memory after.
 }
 
 /*
