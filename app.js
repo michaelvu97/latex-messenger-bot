@@ -43,7 +43,7 @@ function receiveMath (recipientID, math) {
     } else {
       // LaTeX parsing failed, handle accordingly.
       for (var error = 0; error < data.errors.length; error++)
-        sendTextMessage(recipientID , data.errors[i]);
+        sendTextMessage(recipientID , data.errors[error]);
     }
   });
 
