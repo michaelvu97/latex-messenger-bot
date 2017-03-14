@@ -439,8 +439,9 @@ function sendImageMessage(recipientId, imageBuffer) {
 
       callSendAPI(messageData); // remove the image from memory after.
 
-    }, {format: useTransparency ? "png" : "webp",
-        quality: 100});
+    }, {format: useTransparency ? "png" : "webp"});
+        // ,quality: 100});
+
     
   });
 
