@@ -422,7 +422,7 @@ function sendImageMessage(recipientId, imageBuffer) {
     // Now we have the file saved locally, upload it to cloudinary
     cloudinary.uploader.upload(localFilePath, function (result) {
       var imageUrl = result.url;
-
+      console.log(imageUrl);
       var messageData = {
         recipient: {
           id: recipientId
@@ -439,7 +439,7 @@ function sendImageMessage(recipientId, imageBuffer) {
 
       callSendAPI(messageData); // remove the image from memory after.
 
-    }, {format: useTransparency ? "png" : "webp"});
+    }, {format: useTransparency ? "png" : "jpg"});
         // ,quality: 100});
 
     
