@@ -1,6 +1,2 @@
-# Messenger Platform Sample
-
-This is a sample project showcasing the Messenger Platform. You can go through the [walk-through](https://developers.facebook.com/docs/messenger-platform/quickstart) to understand this code in more detail. The [Complete Guide](https://developers.facebook.com/docs/messenger-platform/implementation) goes deeper into the features available.
-
-Visit the [dev site](https://developers.facebook.com/docs/messenger-platform/) to find out more details about the Messenger Platform.
-
+# Latex Messenger Bot
+This is a simple webhook bot that recieves a message in TeX formatting, converts it to svg, then png, temporarily saves the image, and returns the image as a facebook message.
