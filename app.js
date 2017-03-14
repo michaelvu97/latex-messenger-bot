@@ -84,7 +84,9 @@ function createPNG (recipientID, buffer) {
     var width       = parseFloat(bufferString.substring(widthStart,widthEnd));
     var height      = parseFloat(bufferString.substring(heightStart,heightEnd));
 
-    if (height < 20) {
+    console.log("height=" + (height * MULTIPLIER));
+
+    if (height * MULTIPLIER < 20) {
 
       sendTextMessage(recipientID , ERROR_MESSAGE_TOO_SMALL);
 
