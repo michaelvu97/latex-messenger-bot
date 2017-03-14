@@ -27,8 +27,6 @@ const
 // Later on, make this more in depth to actually use the latex compiler errors.
 const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed";
 
-receiveMath("test2", "y=e^x");
-
 function receiveMath (recipientID, math) {
   /*
    * Receives a math string as Tex and converts to svg, which converts to png.
@@ -421,28 +419,28 @@ function sendImageMessage(recipientId, imageBuffer) {
 
     // Now we have the file saved locally, upload it to cloudinary
     cloudinary.uploader.upload(localFilePath, function (result) {
-      console.log(result);
+      var imageUrl = result.url;
+
+      var messageData = {
+        recipient: {
+          id: recipientId
+        },
+        message: {
+          attachment: {
+            type: "image",
+            payload: {
+              url: imageUrl;
+            }
+          }
+        }
+      };
+
+      callSendAPI(messageData); // remove the image from memory after.
+      
     });
     
   });
 
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "image",
-        payload: {
-          url: SERVER_URL + '/output/' + recipientId + '.png'
-        }
-      }
-    }
-  };
-
-
-
-  callSendAPI(messageData); // remove the image from memory after.
 }
 
 /*
