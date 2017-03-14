@@ -25,7 +25,7 @@ const
   cloudinary = require('cloudinary');
 
 // Later on, make this more in depth to actually use the latex compiler errors.
-const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed";
+const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed.\nSee LaTeX documentation: https://users.dickinson.edu/~richesod/latex/latexcheatsheet.pdf";
 
 function receiveMath (recipientID, math) {
   /*
@@ -863,7 +863,6 @@ function callSendAPIWithImageDeletion(messageData, pid) {
   }, function (error, response, body) {
 
     // Remove the image
-    console.log("pid: " + public_id);
     cloudinary.uploader.destroy(public_id, function(result){console.log(result)});
 
     if (!error && response.statusCode == 200) {
