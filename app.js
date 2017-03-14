@@ -438,7 +438,7 @@ function sendImageMessage(recipientId, imageBuffer) {
         }
       };
 
-      callSendAPIWithImageDeletion(messageData);
+      callSendAPIWithImageDeletion(messageData, publicID);
 
     }, {format: useTransparency ? "png" : "jpg",
         quality: 100
