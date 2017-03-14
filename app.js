@@ -422,6 +422,7 @@ function sendImageMessage(recipientId, imageBuffer) {
     // Now we have the file saved locally, upload it to cloudinary
     cloudinary.uploader.upload(localFilePath, function (result) {
       var imageUrl = result.url;
+      var publicID = result.public_id; // For deletion
       console.log(imageUrl);
       var messageData = {
         recipient: {
@@ -437,7 +438,7 @@ function sendImageMessage(recipientId, imageBuffer) {
         }
       };
 
-      callSendAPI(messageData); // remove the image from memory after.
+      callSendAPIWithImageDeletion(messageData);
 
     }, {format: useTransparency ? "png" : "jpg",
         quality: 100
@@ -848,6 +849,35 @@ function callSendAPI(messageData) {
       console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
     }
   });  
+}
+
+function callSendAPIWithImageDeletion(messageData, public_id) {
+  request({
+    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: { access_token: PAGE_ACCESS_TOKEN },
+    method: 'POST',
+    json: messageData
+
+  }, function (error, response, body) {
+
+    // Remove the image
+    cloudinary.uploader.destroy(public_id, function(result){})''
+
+    if (!error && response.statusCode == 200) {
+      var recipientId = body.recipient_id;
+      var messageId = body.message_id;
+
+      if (messageId) {
+        console.log("Successfully sent message with id %s to recipient %s", 
+          messageId, recipientId);
+      } else {
+      console.log("Successfully called Send API for recipient %s", 
+        recipientId);
+      }
+    } else {
+      console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
+    }
+  }); 
 }
 
 // Start server
