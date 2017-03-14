@@ -71,7 +71,7 @@ function createPNG (recipientID, buffer) {
   // Currently this is done by manually reading the svg buffer.
   const widthKey  = "width=\"",
         heightKey = "height=\"",
-        MULTIPLIER = 15; // Arbitrary, keeps it looking nice though.
+        MULTIPLIER = 50; // Arbitrary, keeps it looking nice though.
 
   var widthStart  = bufferString.indexOf(widthKey) + widthKey.length;
   var widthEnd    = bufferString.indexOf("ex", widthStart);
