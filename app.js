@@ -14,16 +14,20 @@ const
   bodyParser = require('body-parser'),
   crypto     = require('crypto'),
   express    = require('express'),
+  http       = require('http'),
   https      = require('https'),  
   request    = require('request'),
   mjAPI      = require('mathjax-node'),
   fs         = require('pn/fs'),
   execFile   = require('child_process').execFile,
   svg2png    = require("svg2png"),
-  phantomjs  = require("phantomjs-prebuilt");
+  phantomjs  = require("phantomjs-prebuilt"),
+  cloudinary = require('cloudinary');
 
 // Later on, make this more in depth to actually use the latex compiler errors.
 const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed";
+
+receiveMath("test2", "y=e^x");
 
 function receiveMath (recipientID, math) {
   /*
@@ -84,8 +88,7 @@ function createPNG (recipientID, buffer) {
   width  = Math.floor(width  * MULTIPLIER);
   height = Math.floor(height * MULTIPLIER);
   svg2png(buffer,{width:width, height:height})
-    .then(buffer => fs.writeFile(pngName, buffer))
-    .then(sendImageMessage(recipientID))
+    .then(buffer => sendImageMessage(recipientID,buffer))
     .catch(e => console.error(e));
 }
 
@@ -98,10 +101,12 @@ app.use(express.static('public'));
 /*
  * Get the environment variables
  */
-const APP_SECRET = process.env.APP_SECRET;
-const VALIDATION_TOKEN = process.env.VALIDATION_TOKEN;
-const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-const SERVER_URL = process.env.SERVER_URL;
+const APP_SECRET            = process.env.APP_SECRET;
+const VALIDATION_TOKEN      = process.env.VALIDATION_TOKEN;
+const PAGE_ACCESS_TOKEN     = process.env.PAGE_ACCESS_TOKEN;
+const SERVER_URL            = process.env.SERVER_URL;
+const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
+const CLOUDINARY_API_KEY    = process.env.CLOUDINARY_API_KEY;
 
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
   console.error("Missing config values");
@@ -182,7 +187,7 @@ app.get('/authorize', function(req, res) {
 
   // Authorization Code should be generated per user by the developer. This will 
   // be passed to the Account Linking callback.
-  var authCode = "1234567890";
+  var authCode = "test";
 
   // Redirect users to this URI on successful login
   var redirectURISuccess = redirectURI + "&authorization_code=" + authCode;
@@ -405,7 +410,14 @@ function receivedAccountLink(event) {
  * Send an image using the Send API.
  *
  */
-function sendImageMessage(recipientId) {
+function sendImageMessage(recipientId, imageBuffer) {
+
+  var base64Buffer = new Buffer(imageBuffer).toString('base64');
+
+  cloudinary.uploader.upload(base64Buffer, function (result) {
+    console.log(result);
+  });
+
   var messageData = {
     recipient: {
       id: recipientId
@@ -420,7 +432,9 @@ function sendImageMessage(recipientId) {
     }
   };
 
-  callSendAPI(messageData); // remove the image from memory after.
+
+
+  // callSendAPI(messageData); // remove the image from memory after.
 }
 
 /*

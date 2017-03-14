@@ -24,7 +24,8 @@
     "svg2png": "4.1.1",
     "phantomjs-prebuilt": "^2.1.14",
     "pn": "^1.0.0",
-    "yargs": "^6.5.0"
+    "yargs": "^6.5.0",
+    "cloudinary": "1.8.0"
   },
   "engines": {
     "node": "^6.0.0",
