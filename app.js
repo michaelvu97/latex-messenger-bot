@@ -28,6 +28,7 @@ const
 const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed.\nSee LaTeX documentation: https://users.dickinson.edu/~richesod/latex/latexcheatsheet.pdf";
 const ERROR_MESSAGE_TOO_SMALL = "The output image was too small\nIf you believe this is an error, please leave a bug report on the LatexBot Facebook page.";
 
+receiveMath("a","\\frac{");
 function receiveMath (recipientID, math) {
   /*
    * Receives a math string as Tex and converts to svg, which converts to png.
@@ -42,7 +43,7 @@ function receiveMath (recipientID, math) {
       createSVG(recipientID, data);
     } else {
       // LaTeX parsing failed, handle accordingly.
-      sendTextMessage(recipientID , ERROR_MESSAGE_LATEX_FAILED);
+      sendTextMessage(recipientID , data);
     }
   });
 
