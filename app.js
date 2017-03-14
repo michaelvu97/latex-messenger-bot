@@ -26,7 +26,7 @@ const
 
 // Later on, make this more in depth to actually use the latex compiler errors.
 const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed.\nSee LaTeX documentation: https://users.dickinson.edu/~richesod/latex/latexcheatsheet.pdf";
-
+const ERROR_MESSAGE_TOO_SMALL = "The output image was too small\nIf you believe this is an error, please leave a bug report on the LatexBot Facebook page.";
 function receiveMath (recipientID, math) {
   /*
    * Receives a math string as Tex and converts to svg, which converts to png.
@@ -82,12 +82,20 @@ function createPNG (recipientID, buffer) {
   var width       = parseFloat(bufferString.substring(widthStart,widthEnd));
   var height      = parseFloat(bufferString.substring(heightStart,heightEnd));
 
-  // SVG stores the height and width as relative ratios.
-  width  = Math.floor(width  * MULTIPLIER);
-  height = Math.floor(height * MULTIPLIER);
-  svg2png(buffer,{width:width, height:height})
-    .then(buffer => sendImageMessage(recipientID,buffer))
-    .catch(e => console.error(e));
+  if (height < 20) {
+
+    sendTextMessage(recipientID , ERROR_MESSAGE_TOO_SMALL);
+
+  } else {
+
+    // SVG stores the height and width as relative ratios.
+    width  = Math.floor(width  * MULTIPLIER);
+    height = Math.floor(height * MULTIPLIER);
+    svg2png(buffer,{width:width, height:height})
+      .then(buffer => sendImageMessage(recipientID,buffer))
+      .catch(e => console.error(e));
+
+  }
 }
 
 var app = express();
