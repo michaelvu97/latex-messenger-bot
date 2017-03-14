@@ -439,7 +439,7 @@ function sendImageMessage(recipientId, imageBuffer) {
 
       callSendAPI(messageData); // remove the image from memory after.
 
-    }, {format: useTransparency ? "png" : "jpg"});
+    }, {format: useTransparency ? "png" : "webp"});
     
   });
 
