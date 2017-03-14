@@ -861,7 +861,7 @@ function callSendAPIWithImageDeletion(messageData, public_id) {
   }, function (error, response, body) {
 
     // Remove the image
-    cloudinary.uploader.destroy(public_id, function(result){})''
+    cloudinary.uploader.destroy(public_id, function(result){});
 
     if (!error && response.statusCode == 200) {
       var recipientId = body.recipient_id;
