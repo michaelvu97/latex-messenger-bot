@@ -42,7 +42,8 @@ function receiveMath (recipientID, math) {
       createSVG(recipientID, data);
     } else {
       // LaTeX parsing failed, handle accordingly.
-      sendTextMessage(recipientID , data);
+      for (var error = 0; error < data.errors.size(); error++)
+        sendTextMessage(recipientID , data.errors[i]);
     }
   });
 
