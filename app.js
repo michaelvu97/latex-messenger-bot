@@ -412,6 +412,8 @@ function sendImageMessage(recipientId, imageBuffer) {
 
   var base64Buffer = new Buffer(imageBuffer).toString('base64');
 
+  var useTransparency = false;
+
   var localFilePath = "./output/" + recipientId + ".png";
 
   fs.writeFile(localFilePath, imageBuffer, function (error) {
@@ -437,7 +439,7 @@ function sendImageMessage(recipientId, imageBuffer) {
 
       callSendAPI(messageData); // remove the image from memory after.
 
-    });
+    }, {format: useTransparency ? "png" : "jpg"});
     
   });
 
