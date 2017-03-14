@@ -27,6 +27,7 @@ const
 // Later on, make this more in depth to actually use the latex compiler errors.
 const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed.\nSee LaTeX documentation: https://users.dickinson.edu/~richesod/latex/latexcheatsheet.pdf";
 const ERROR_MESSAGE_TOO_SMALL = "The output image was too small\nIf you believe this is an error, please leave a bug report on the LatexBot Facebook page.";
+
 function receiveMath (recipientID, math) {
   /*
    * Receives a math string as Tex and converts to svg, which converts to png.
@@ -67,34 +68,38 @@ function createPNG (recipientID, buffer) {
   var pngName = 'output/' + recipientID + '.png';
   var bufferString = buffer.toString();
 
-  // Get the height and width from the svg.
-  // Currently this is done by manually reading the svg buffer.
-  const widthKey  = "width=\"",
-        heightKey = "height=\"",
-        MULTIPLIER = 50; // Arbitrary, keeps it looking nice though.
+  if (bufferString != "undefined") {
+    // Get the height and width from the svg.
+    // Currently this is done by manually reading the svg buffer.
+    const widthKey  = "width=\"",
+          heightKey = "height=\"",
+          MULTIPLIER = 50; // Arbitrary, keeps it looking nice though.
 
-  var widthStart  = bufferString.indexOf(widthKey) + widthKey.length;
-  var widthEnd    = bufferString.indexOf("ex", widthStart);
+    var widthStart  = bufferString.indexOf(widthKey) + widthKey.length;
+    var widthEnd    = bufferString.indexOf("ex", widthStart);
 
-  var heightStart = bufferString.indexOf(heightKey) + heightKey.length;
-  var heightEnd   = bufferString.indexOf("ex", heightStart);
+    var heightStart = bufferString.indexOf(heightKey) + heightKey.length;
+    var heightEnd   = bufferString.indexOf("ex", heightStart);
 
-  var width       = parseFloat(bufferString.substring(widthStart,widthEnd));
-  var height      = parseFloat(bufferString.substring(heightStart,heightEnd));
+    var width       = parseFloat(bufferString.substring(widthStart,widthEnd));
+    var height      = parseFloat(bufferString.substring(heightStart,heightEnd));
 
-  if (height < 20) {
+    if (height < 20) {
 
-    sendTextMessage(recipientID , ERROR_MESSAGE_TOO_SMALL);
+      sendTextMessage(recipientID , ERROR_MESSAGE_TOO_SMALL);
 
+    } else {
+
+      // SVG stores the height and width as relative ratios.
+      width  = Math.floor(width  * MULTIPLIER);
+      height = Math.floor(height * MULTIPLIER);
+      svg2png(buffer,{width:width, height:height})
+        .then(buffer => sendImageMessage(recipientID,buffer))
+        .catch(e => console.error(e));
+
+    }
   } else {
-
-    // SVG stores the height and width as relative ratios.
-    width  = Math.floor(width  * MULTIPLIER);
-    height = Math.floor(height * MULTIPLIER);
-    svg2png(buffer,{width:width, height:height})
-      .then(buffer => sendImageMessage(recipientID,buffer))
-      .catch(e => console.error(e));
-
+    sendTextMessage(recipientID, ERROR_MESSAGE_LATEX_FAILED);
   }
 }
 
