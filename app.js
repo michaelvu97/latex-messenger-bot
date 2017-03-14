@@ -851,7 +851,9 @@ function callSendAPI(messageData) {
   });  
 }
 
-function callSendAPIWithImageDeletion(messageData, public_id) {
+function callSendAPIWithImageDeletion(messageData, pid) {
+
+  var public_id = pid;
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -861,6 +863,7 @@ function callSendAPIWithImageDeletion(messageData, public_id) {
   }, function (error, response, body) {
 
     // Remove the image
+    console.log("pid: " + public_id);
     cloudinary.uploader.destroy(public_id, function(result){console.log(result)});
 
     if (!error && response.statusCode == 200) {
