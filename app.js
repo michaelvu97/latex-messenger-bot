@@ -48,6 +48,8 @@ function receiveMath (recipientID, math) {
       wrapper_removed = true;
     } else if (math.length == 1) {
       math = "";
+    } else if (math.charAt(math.length - 2) == '\\') {
+      break;
     }
   }
 
@@ -66,7 +68,8 @@ function receiveMath (recipientID, math) {
   });
 
   if (wrapper_removed) {
-    sendTextMessage(recipientID, "For future reference, you do not need to wrap")
+    sendTextMessage(recipientID, "For future reference, you do not need to " + 
+                                 "wrap your messages with '$'");
   }
 }
 
