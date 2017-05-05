@@ -36,11 +36,19 @@ function receiveMath (recipientID, math) {
   /*
    * Remove $ wrapping message in case the user wastes their time.
    */
+  var wrapper_removed = false;
   while (math.length > 0 && math.charAt(0) == '$') {
     math = math.substring(1);
+    wrapper_removed = true;
   }
   while (math.length > 0 && math.endsWith('$')) {
-    math = math.substring(0,lastIndexOf('$'));
+    // make sure we are not removing an escaped '$'
+    if (math.length > 1 && math.charAt(math.length - 2) != '\\') {
+      math = math.substring(0,math.lastIndexOf('$'));
+      wrapper_removed = true;
+    } else if (math.length == 1) {
+      math = "";
+    }
   }
 
   mjAPI.typeset({
@@ -57,6 +65,9 @@ function receiveMath (recipientID, math) {
     }
   });
 
+  if (wrapper_removed) {
+    sendTextMessage(recipientID, "For future reference, you do not need to wrap")
+  }
 }
 
 function createSVG(recipientID, result) {
