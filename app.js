@@ -33,6 +33,16 @@ function receiveMath (recipientID, math) {
    * Receives a math string as Tex and converts to svg, which converts to png.
    */
 
+  /*
+   * Remove $ wrapping message in case the user wastes their time.
+   */
+  while (math.length > 0 && math.charAt(0) == '$') {
+    math = math.substring(1);
+  }
+  while (math.length > 0 && math.endsWith('$')) {
+    math = math.substring(0,lastIndexOf('$'));
+  }
+
   mjAPI.typeset({
     math:   math,
     format: "TeX",
