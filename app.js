@@ -28,6 +28,71 @@ const
 const ERROR_MESSAGE_LATEX_FAILED = "Error, LaTeX parsing failed.\nSee LaTeX documentation: https://users.dickinson.edu/~richesod/latex/latexcheatsheet.pdf";
 const ERROR_MESSAGE_TOO_SMALL = "The output image was too small\nIf you believe this is an error, please leave a bug report on the LatexBot Facebook page.";
 
+// Keep track of the users who have messaged this service.
+// Hashset
+var knownUsers = {};
+var fileWriteBusy = false;
+var previousListLoaded = false;
+
+const WELCOME_MESSAGE = "Hello! Welcome to LaTeXBot. Send me a valid LaTeX string ('$' not necessary) and I will return a rasterized image.\n" +
+                        "Bugs? I'm available at the email given on at https://www.facebook.com/LaTeXBot/"
+
+var main = function () {
+
+    loadKnownUsers();
+
+    // Manually backup users every 5 minutes
+    setInterval(backupKnownUsers, 36000);
+
+}
+
+if (require.main === module) {
+    main();
+}
+
+function addNewUser (senderID) {
+    /*
+     * Add a single user to the known db.
+     */
+
+    knownUsers[senderID] = true;
+
+    console.log("Adding new user " + senderID);
+
+    backupKnownUsers();
+    
+}
+
+function loadKnownUsers () {
+
+    fs.readFile('knownUsers.json', (err, data) => {
+        if (err)
+            throw err;
+
+        knownUsers = JSON.parse(data);
+        for (var key in knownUsers) {
+            if (knownUsers.hasOwnProperty(key)) {
+                console.log(key);
+            }
+        }
+
+        previousListLoaded = true;
+    });
+
+}
+
+function backupKnownUsers () {
+
+    if (!fileWriteBusy && previousListLoaded) {
+        fileWriteBusy = true;
+        console.log("Saving users: " + JSON.stringify(knownUsers));
+        fs.writeFile('knownUsers.json', JSON.stringify(knownUsers), () => {
+            fileWriteBusy = false;
+        });
+    }
+
+}
+
 function receiveMath (recipientID, math) {
   /*
    * Receives a math string as Tex and converts to svg, which converts to png.
@@ -345,6 +410,13 @@ function receivedMessage(event) {
   }
 
   if (messageText) {
+
+    // Check the known users list.
+    if (knownUsers[senderID] === false) {
+        // New user, send the welcome message.
+        sendTextMessage(senderID, WELCOME_MESSAGE);
+        addNewUser(senderID);
+    }
 
     // Receieved a message, go through the LaTeX parse chain.
     receiveMath(senderID, messageText);
