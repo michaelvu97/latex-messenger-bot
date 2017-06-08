@@ -412,7 +412,7 @@ function receivedMessage(event) {
   if (messageText) {
 
     // Check the known users list.
-    if (knownUsers[senderID] === false) {
+    if (knownUsers[senderID] !== true) {
         // New user, send the welcome message.
         sendTextMessage(senderID, WELCOME_MESSAGE);
         addNewUser(senderID);
