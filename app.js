@@ -454,7 +454,9 @@ function sendImageMessage(recipientId, imageBuffer) {
 
   var useTransparency = false;
 
-  var localFilePath = "./output/" + recipientId + ".png";
+  var rand = Math.random();
+
+  var localFilePath = "./output/" + recipientId + rand + ".png";
 
   fs.writeFile(localFilePath, imageBuffer, function (error) {
     console.log(error);
